@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/admin-header :: head('System Settings')}">
+</head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav th:replace="~{admin/fragments/admin-nav :: navbar}"></nav>
+
+    <!-- Sidebar -->
+    <div th:replace="~{admin/fragments/admin-nav :: sidebar}"></div>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper pt-3">
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card card-outline card-dark rounded-0 shadow">
+                    <div class="card-header">
+                        <h5 class="card-title">System Information</h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/admin/system}" method="post" enctype="multipart/form-data" id="system-frm">
+                            
+                            <div class="form-group">
+                                <label for="name" class="control-label">System Name</label>
+                                <input type="text" class="form-control form-control-sm" name="name" id="name" th:value="${systemInfo.get('name')}">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="short_name" class="control-label">System Short Name</label>
+                                <input type="text" class="form-control form-control-sm" name="short_name" id="short_name" th:value="${systemInfo.get('short_name')}">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="welcome" class="control-label">Welcome Content</label>
+                                <textarea rows="10" class="form-control form-control-sm summernote" name="welcome" id="welcome" th:text="${systemInfo.get('welcome')}"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="about" class="control-label">About Us</label>
+                                <textarea rows="10" class="form-control form-control-sm summernote" name="about" id="about" th:text="${systemInfo.get('about')}"></textarea>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="logoFile" class="control-label">System Logo</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="logoFile" name="logo" accept="image/png,image/jpeg" onchange="displayImg(this, '#cimg')">
+                                    <label class="custom-file-label" for="logoFile">Choose file</label>
+                                </div>
+                            </div>
+                            <div class="form-group d-flex justify-content-center">
+                                <img th:src="${systemInfo.get('logo') != null ? '/uploads/' + systemInfo.get('logo') : '/dist/img/no-image-available.png'}" alt="System Logo" id="cimg" class="img-fluid img-thumbnail" style="height: 15vh; width: 15vh; object-fit: scale-down; border-radius: 100%;">
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="coverFile" class="control-label">Cover</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="coverFile" name="cover" accept="image/png,image/jpeg" onchange="displayImg(this, '#cimg2')">
+                                    <label class="custom-file-label" for="coverFile">Choose file</label>
+                                </div>
+                            </div>
+                            <div class="form-group d-flex justify-content-center">
+                                <img th:src="${systemInfo.get('cover') != null ? '/uploads/' + systemInfo.get('cover') : '/dist/img/no-image-available.png'}" alt="Cover Image" id="cimg2" class="img-fluid img-thumbnail bg-gradient-dark border-dark" style="height: 30vh; width: 100%; object-fit: contain;">
+                            </div>
+                            
+                            <fieldset class="border p-3 mb-3">
+                                <legend class="w-auto px-2">Company's Information</legend>
+                                <div class="form-group">
+                                    <label for="email" class="control-label">Email</label>
+                                    <input type="email" class="form-control form-control-sm" name="email" id="email" th:value="${systemInfo.get('email')}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="contact" class="control-label">Contact #</label>
+                                    <input type="text" class="form-control form-control-sm" name="contact" id="contact" th:value="${systemInfo.get('contact')}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="address" class="control-label">Address</label>
+                                    <textarea rows="3" class="form-control form-control-sm" name="address" id="address" style="resize:none" th:text="${systemInfo.get('address')}"></textarea>
+                                </div>
+                            </fieldset>
+                            
+                            <div class="card-footer px-0 bg-transparent border-top-0">
+                                <button type="submit" class="btn btn-sm btn-primary btn-flat">Update Settings</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{admin/fragments/admin-footer :: footer}"></footer>
+</div>
+
+<div th:replace="~{admin/fragments/admin-footer :: scripts}"></div>
+
+<!-- Summernote CSS & JS -->
+<link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-bs4.min.js"></script>
+
+<script>
+    function displayImg(input, targetSelector) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $(targetSelector).attr('src', e.target.result);
+                $(input).siblings('.custom-file-label').html(input.files[0].name);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    
+    $(document).ready(function(){
+        $('.summernote').summernote({
+            height: '40vh',
+            toolbar: [
+                [ 'style', [ 'style' ] ],
+                [ 'font', [ 'bold', 'italic', 'underline', 'strikethrough', 'superscript', 'subscript', 'clear'] ],
+                [ 'fontname', [ 'fontname' ] ],
+                [ 'fontsize', [ 'fontsize' ] ],
+                [ 'color', [ 'color' ] ],
+                [ 'para', [ 'ol', 'ul', 'paragraph', 'height' ] ],
+                [ 'table', [ 'table' ] ],
+                ['insert', ['link', 'picture']],
+                [ 'view', [ 'undo', 'redo', 'fullscreen', 'codeview', 'help' ] ]
+            ]
+        });
+    });
+</script>
+</body>
+</html>

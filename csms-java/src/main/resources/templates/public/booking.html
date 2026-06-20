@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/fragments/public-header :: head('Book a Storage')"></head>
+<body class="layout-top-nav layout-fixed layout-navbar-fixed" style="height:auto;">
+<div class="wrapper">
+    <div th:replace="public/fragments/public-nav :: topbar"></div>
+    <div th:replace="public/fragments/public-nav :: navbar('booking')"></div>
+
+    <div class="content-wrapper pt-5">
+        <section class="content py-3">
+            <div class="container-fluid">
+                <h3 class="text-center"><b>Application Form</b></h3>
+                <hr class="bg-navy">
+
+                <div th:if="${param.success}" class="alert alert-success">
+                    <i class="fa fa-check mr-2"></i> Your booking has been submitted successfully!
+                </div>
+
+                <div class="card card-outline card-info rounded-0 shadow">
+                    <div class="card-body rounded-0">
+                        <form action="/booking" method="post" id="booking-form">
+                            <!-- Client Information -->
+                            <fieldset>
+                                <legend class="text-info">Client's Information</legend>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <input type="text" name="firstname" autofocus
+                                               class="form-control form-control-sm"
+                                               placeholder="Firstname" required>
+                                        <small class="text-muted px-4">First Name</small>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <input type="text" name="middlename"
+                                               class="form-control form-control-sm"
+                                               placeholder="(optional)">
+                                        <small class="text-muted px-4">Middle Name</small>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <input type="text" name="lastname"
+                                               class="form-control form-control-sm"
+                                               placeholder="Last Name" required>
+                                        <small class="text-muted px-4">Last Name</small>
+                                    </div>
+                                </div>
+                                <div class="row align-items-center">
+                                    <div class="col-md-4 form-group">
+                                        <small class="text-muted">Gender</small>
+                                        <div class="d-flex mt-1">
+                                            <div class="custom-control custom-radio mr-3">
+                                                <input class="custom-control-input" type="radio"
+                                                       id="genderMale" name="gender" value="Male" checked required>
+                                                <label for="genderMale" class="custom-control-label">Male</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input class="custom-control-input" type="radio"
+                                                       id="genderFemale" name="gender" value="Female">
+                                                <label for="genderFemale" class="custom-control-label">Female</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 form-group">
+                                        <input type="date" name="dob"
+                                               class="form-control form-control-sm" required>
+                                        <small class="text-muted px-4">Date of Birthday</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <input type="text" name="contact"
+                                               class="form-control form-control-sm"
+                                               placeholder="Contact" required>
+                                        <small class="text-muted px-4">Contact #</small>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <input type="email" name="email"
+                                               class="form-control form-control-sm"
+                                               placeholder="Email" required>
+                                        <small class="text-muted px-4">Email</small>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <small class="text-muted">Address</small>
+                                        <textarea name="address" rows="3" style="resize:none"
+                                                  class="form-control form-control-sm rounded-0"
+                                                  placeholder="Here Street, There City, Anywhere State, 2306"></textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+
+                            <!-- Booking Information -->
+                            <fieldset>
+                                <legend class="text-info">Booking Information</legend>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <small class="text-muted px-4">Cold Storage</small>
+                                        <select name="storage_id" id="storage_id"
+                                                class="form-control" required>
+                                            <option value="" disabled selected>-- Select Storage --</option>
+                                            <option th:each="s : ${storages}"
+                                                    th:value="${s.id}"
+                                                    th:text="${s.name}"
+                                                    th:attr="data-cost=${s.cost},data-desc=${s.description}">
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <small class="text-muted px-4">Type</small>
+                                        <select name="type" class="form-control" required>
+                                            <option value="" disabled selected>-- Select Type --</option>
+                                            <option>Fruits</option>
+                                            <option>Grains</option>
+                                            <option>Pulses</option>
+                                            <option>Vegetables</option>
+                                            <option>Others</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <input type="date" id="date_from" name="date_from"
+                                               class="form-control form-control-sm" required>
+                                        <small class="text-muted px-4">Date From</small>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <input type="date" id="date_to" name="date_to"
+                                               class="form-control form-control-sm" required>
+                                        <small class="text-muted px-4">Date To</small>
+                                    </div>
+                                </div>
+                                <hr>
+                                <table class="table table-bordered" id="other-info">
+                                    <colgroup><col width="30%"><col width="70%"></colgroup>
+                                    <tbody>
+                                        <tr>
+                                            <th>Cold Storage Description</th>
+                                            <td id="storage-description">-----</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Cold Storage Cost <small>(per day)</small>
+                                                <input type="hidden" name="cost" id="cost-hidden">
+                                            </th>
+                                            <td id="storage-cost" class="text-right">--</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Days of Storing
+                                                <input type="hidden" name="storing_days" id="days-hidden">
+                                            </th>
+                                            <td id="storage-days" class="text-right">--</td>
+                                        </tr>
+                                        <tr>
+                                            <th>Total Payable Amount
+                                                <input type="hidden" name="amount" id="amount-hidden">
+                                            </th>
+                                            <td id="storage-amount" class="text-right font-weight-bold">----</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="row">
+                                    <div class="form-group col-md-12">
+                                        <small class="text-muted">Other Information</small>
+                                        <textarea name="other_info" rows="3" style="resize:none"
+                                                  class="form-control form-control-sm rounded-0"
+                                                  placeholder="Write other information if any here."></textarea>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <hr class="bg-navy">
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-sm btn-primary mx-2 px-5">Submit Booking</button>
+                                <a href="/" class="btn btn-sm btn-light border mx-2 px-5">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="public/fragments/public-nav :: footer"></div>
+</div>
+<script>
+function calcAmount(){
+    var days = parseInt($('#days-hidden').val()) || 0;
+    var cost = parseFloat($('#cost-hidden').val()) || 0;
+    var amount = days > 0 && cost > 0 ? cost * days : 0;
+    $('#storage-amount').text(amount.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}));
+    $('#amount-hidden').val(amount);
+}
+$(function(){
+    $('#storage_id').change(function(){
+        var opt = $(this).find('option:selected');
+        $('#storage-description').html(opt.data('desc') || '-----');
+        var cost = parseFloat(opt.data('cost')) || 0;
+        $('#storage-cost').text(cost.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}));
+        $('#cost-hidden').val(cost);
+        calcAmount();
+    });
+    $('#date_from,#date_to').change(function(){
+        var from = $('#date_from').val(), to = $('#date_to').val();
+        var days = 0;
+        if(from && to){
+            days = Math.floor((new Date(to) - new Date(from)) / (1000*3600*24));
+        }
+        $('#days-hidden').val(days);
+        $('#storage-days').text(days.toLocaleString('en-US'));
+        calcAmount();
+    });
+});
+</script>
+</body>
+</html>

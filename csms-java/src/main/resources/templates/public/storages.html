@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/fragments/public-header :: head('Our Storages')">
+    <style>
+        .storage-image-field { width:100%; height:25vh; }
+        .storage-image { transition:transform .2s ease-in; width:100%; height:100%; object-fit:cover; object-position:center; }
+        .storage-item { transition:transform .2s ease-in; }
+        .storage-item:hover { transform:scale(1.029); }
+        .storage-item:hover .storage-image { transform:scale(1.2); }
+    </style>
+</head>
+<body class="layout-top-nav layout-fixed layout-navbar-fixed" style="height:auto;">
+<div class="wrapper">
+    <div th:replace="public/fragments/public-nav :: topbar"></div>
+    <div th:replace="public/fragments/public-nav :: navbar('storages')"></div>
+
+    <div class="content-wrapper pt-5">
+        <section class="content py-3">
+            <div class="container-fluid">
+                <h3 class="text-center"><b>Our Storages</b></h3>
+                <hr class="bg-navy">
+
+                <div class="row justify-content-center mb-3">
+                    <div class="col-md-5">
+                        <div class="input-group">
+                            <input type="search" id="search" class="form-control"
+                                   placeholder="Search storage here...">
+                            <div class="input-group-append">
+                                <button type="button" class="btn btn-default border">
+                                    <i class="fa fa-search"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row row-cols-sm-1 row-cols-md-2 row-cols-xl-4 justify-content-center">
+
+                    <div th:each="storage : ${storages}"
+                         class="col storage-item mb-3">
+                        <a th:href="@{/storages/{id}(id=${storage.id})}"
+                           class="text-decoration-none text-dark">
+                            <div class="card rounded-0 shadow">
+                                <div class="text-center overflow-hidden storage-image-field">
+                                    <img class="storage-image bg-gradient-dark"
+                                         th:src="@{/uploads/__${storage.thumbnailPath}__}"
+                                         onerror="this.src='https://via.placeholder.com/300x200?text=Storage'"
+                                         alt="Storage Image">
+                                </div>
+                                <div class="card-body rounded-0">
+                                    <h4 class="text-center"><b th:text="${storage.name}">Name</b></h4>
+                                    <h5 class="text-center">
+                                        <small class="text-muted">
+                                            <i class="fa fa-tag"></i>
+                                            <span th:text="'₱ ' + ${#numbers.formatDecimal(storage.cost, 1, 2)}">0.00</span>
+                                        </small>
+                                    </h5>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col-12 text-center" th:if="${#lists.isEmpty(storages)}">
+                        <span class="text-muted">No Storage Listed Yet.</span>
+                    </div>
+                    <div id="no_result" style="display:none;" class="col-12 text-center">
+                        <span class="text-muted">No Result.</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="public/fragments/public-nav :: footer"></div>
+</div>
+<script>
+    $(function(){
+        $('#search').on("input",function(){
+            var _search = $(this).val().toLowerCase();
+            $('.storage-item').each(function(){
+                var _txt = $(this).text().toLowerCase();
+                $(this).toggle(_txt.includes(_search));
+                if($('.storage-item:visible').length <= 0){
+                    $("#no_result").show('slow');
+                }else{
+                    $("#no_result").hide();
+                }
+            });
+        });
+    });
+</script>
+</body>
+</html>

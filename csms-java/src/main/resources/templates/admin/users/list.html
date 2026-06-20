@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/fragments/admin-header :: head('System Users')}"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav th:replace="~{admin/fragments/admin-nav :: navbar}"></nav>
+
+    <!-- Sidebar -->
+    <div th:replace="~{admin/fragments/admin-nav :: sidebar}"></div>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">System Users</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card card-outline card-primary rounded-0 shadow">
+                    <div class="card-header">
+                        <h3 class="card-title">List of System Users</h3>
+                        <div class="card-tools">
+                            <a href="/admin/users/manage" class="btn btn-flat btn-primary"><span class="fas fa-plus"></span> Create New User</a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <table class="table table-hover table-striped data-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Avatar</th>
+                                        <th>Name</th>
+                                        <th>Username</th>
+                                        <th>User Type</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="user, stat : ${users}">
+                                        <td class="text-center" th:text="${stat.index + 1}">1</td>
+                                        <td class="text-center">
+                                            <img th:src="${user.avatar != null ? '/uploads/' + user.avatar : '/dist/img/no-image-available.png'}" class="img-circle img-thumbnail" alt="user_avatar" style="width:45px; height:45px; object-fit:cover; object-position:center center; border-radius:100%;">
+                                        </td>
+                                        <td th:text="${(user.firstname ?: '') + ' ' + (user.lastname ?: '')}">John Doe</td>
+                                        <td th:text="${user.username}">username</td>
+                                        <td th:text="${user.type == 1 ? 'Administrator' : 'Staff'}">Staff</td>
+                                        <td align="center">
+                                            <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                Action
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu" role="menu">
+                                                <a class="dropdown-item" th:href="@{'/admin/users/manage?id=' + ${user.id}}"><span class="fa fa-edit text-primary"></span> Edit</a>
+                                                <div class="dropdown-divider"></div>
+                                                <form th:action="@{/admin/users/delete}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure to delete this user permanently?');">
+                                                    <input type="hidden" name="id" th:value="${user.id}"/>
+                                                    <button type="submit" class="dropdown-item"><span class="fa fa-trash text-danger"></span> Delete</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{admin/fragments/admin-footer :: footer}"></footer>
+</div>
+
+<div th:replace="~{admin/fragments/admin-footer :: scripts}"></div>
+</body>
+</html>

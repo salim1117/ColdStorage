@@ -1,0 +1,11 @@
+uploads/
+plugins/
+
+*.png
+*.jpg
+*.jpeg
+*.gif
+*.webp
+*.svg
+
+*.min.js

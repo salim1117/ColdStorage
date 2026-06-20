@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/fragments/public-header :: head('About Us')"></head>
+<body class="layout-top-nav layout-fixed layout-navbar-fixed" style="height:auto;">
+<div class="wrapper">
+    <div th:replace="public/fragments/public-nav :: topbar"></div>
+    <div th:replace="public/fragments/public-nav :: navbar('about')"></div>
+
+    <div class="content-wrapper pt-5">
+        <section class="content">
+            <div class="container">
+                <div class="col-12">
+                    <div class="row my-5">
+                        <!-- Contact Info Column -->
+                        <div class="col-md-5">
+                            <div class="card card-outline card-navy rounded-0 shadow">
+                                <div class="card-header">
+                                    <h4 class="card-title">Contact</h4>
+                                </div>
+                                <div class="card-body rounded-0">
+                                    <dl>
+                                        <dt class="text-muted"><i class="fa fa-envelope"></i> Email</dt>
+                                        <dd class="pr-4" th:text="${systemInfo?.get('email')}">email@example.com</dd>
+                                        <dt class="text-muted"><i class="fa fa-phone"></i> Contact #</dt>
+                                        <dd class="pr-4" th:text="${systemInfo?.get('contact')}">+00 000 0000</dd>
+                                        <dt class="text-muted"><i class="fa fa-map-marked-alt"></i> Location</dt>
+                                        <dd class="pr-4" th:text="${systemInfo?.get('address')}">Address</dd>
+                                    </dl>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- About Content Column -->
+                        <div class="col-md-7">
+                            <div class="card rounded-0 card-outline card-navy shadow">
+                                <div class="card-body rounded-0">
+                                    <h2 class="text-center">About</h2>
+                                    <center><hr class="bg-navy w-25"></center>
+                                    <div th:utext="${systemInfo?.get('about')} ?: '<p>Cold Storage Management System provides safe, reliable cold storage solutions.</p>'">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="public/fragments/public-nav :: footer"></div>
+</div>
+</body>
+</html>

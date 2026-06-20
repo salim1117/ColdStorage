@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/fragments/public-header :: head('Storage Details')"></head>
+<body class="layout-top-nav layout-fixed layout-navbar-fixed" style="height:auto;">
+<div class="wrapper">
+    <div th:replace="public/fragments/public-nav :: topbar"></div>
+    <div th:replace="public/fragments/public-nav :: navbar('storages')"></div>
+
+    <div class="content-wrapper pt-5">
+        <section class="content py-4">
+            <div class="container">
+                <div th:if="${storage == null}" class="alert alert-danger">
+                    Storage not found. <a href="/storages">Go back to storages</a>.
+                </div>
+                <div th:if="${storage != null}">
+                    <div class="row">
+                        <div class="col-md-5">
+                            <img th:src="@{/uploads/__${storage.thumbnailPath}__}"
+                                 onerror="this.src='https://via.placeholder.com/500x350?text=Storage'"
+                                 alt="Storage Image"
+                                 class="img-fluid rounded shadow w-100"
+                                 style="object-fit:cover;max-height:350px;">
+                        </div>
+                        <div class="col-md-7">
+                            <h2 th:text="${storage.name}">Storage Name</h2>
+                            <hr class="bg-navy">
+                            <dl>
+                                <dt class="text-muted">Description</dt>
+                                <dd th:utext="${storage.description}">Description</dd>
+                                <dt class="text-muted">Price per day</dt>
+                                <dd class="text-primary font-weight-bold"
+                                    th:text="'₱ ' + ${#numbers.formatDecimal(storage.cost, 1, 2)}">0.00</dd>
+                            </dl>
+                            <a href="/booking" class="btn btn-primary rounded-pill px-5 mt-2">
+                                <i class="fa fa-calendar-check mr-2"></i>Book Now
+                            </a>
+                            <a href="/storages" class="btn btn-light border ml-2 mt-2">
+                                <i class="fa fa-arrow-left mr-1"></i>Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="public/fragments/public-nav :: footer"></div>
+</div>
+</body>
+</html>

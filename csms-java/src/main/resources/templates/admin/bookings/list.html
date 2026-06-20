@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/fragments/admin-header :: head('Bookings')}"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav th:replace="~{admin/fragments/admin-nav :: navbar}"></nav>
+
+    <!-- Sidebar -->
+    <div th:replace="~{admin/fragments/admin-nav :: sidebar}"></div>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper">
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row mb-2">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">Bookings</h1>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card card-outline card-primary rounded-0 shadow">
+                    <div class="card-header">
+                        <h3 class="card-title">List of Bookings</h3>
+                    </div>
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <table class="table table-hover table-striped data-table">
+                                <colgroup>
+                                    <col width="5%">
+                                    <col width="15%">
+                                    <col width="15%">
+                                    <col width="20%">
+                                    <col width="20%">
+                                    <col width="10%">
+                                    <col width="15%">
+                                </colgroup>
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th>Date Created</th>
+                                        <th>Booking Code</th>
+                                        <th>Client's Name</th>
+                                        <th>Storage Name</th>
+                                        <th>Status</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="booking, stat : ${bookings}">
+                                        <td class="text-center" th:text="${stat.index + 1}">1</td>
+                                        <td th:text="${booking.dateCreated != null ? #temporals.format(booking.dateCreated, 'yyyy-MM-dd HH:mm') : ''}">2024-12-15 10:15</td>
+                                        <td th:text="${booking.bookCode}">BK-01</td>
+                                        <td th:text="${booking.clientName}">Client Name</td>
+                                        <td th:text="${storageNames?.get(booking.storageId)} ?: ('Storage ID: ' + ${booking.storageId})">Storage 101</td>
+                                        <td class="text-center">
+                                            <span th:class="'badge badge-' + ${booking.statusBadgeClass} + ' badge-pill'" th:text="${booking.statusLabel}">Pending</span>
+                                        </td>
+                                        <td align="center">
+                                            <button type="button" class="btn btn-flat btn-default btn-sm dropdown-toggle dropdown-icon" data-toggle="dropdown">
+                                                Action
+                                                <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu" role="menu">
+                                                <a class="dropdown-item" th:href="@{'/admin/bookings/' + ${booking.id}}"><span class="fa fa-window-restore text-gray"></span> View / Edit Status</a>
+                                                <div class="dropdown-divider"></div>
+                                                <form th:action="@{/admin/bookings/delete}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure to delete this booking permanently?');">
+                                                    <input type="hidden" name="id" th:value="${booking.id}"/>
+                                                    <button type="submit" class="dropdown-item"><span class="fa fa-trash text-danger"></span> Delete</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{admin/fragments/admin-footer :: footer}"></footer>
+</div>
+
+<div th:replace="~{admin/fragments/admin-footer :: scripts}"></div>
+</body>
+</html>

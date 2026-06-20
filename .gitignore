@@ -1,0 +1,67 @@
+# Compiled class files
+*.class
+target/
+*.jar
+*.war
+*.ear
+*.nar
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath
+*.ipr
+*.iws
+
+# Maven
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+*~
+
+# Log files
+*.log
+logs/
+
+# Database
+*.db
+*.sqlite
+
+# Temporary files
+*.tmp
+*.bak
+
+# Build output
+/build/
+/out/
+
+# Graphify cache (keep reports but not cache)
+graphify-out/cache/
+graphify-out/2026-06-20/
+graphify-out/2026-06-20_2/
+
+# Node modules (if any frontend build tools used)
+node_modules/
+
+# Environment variables
+.env
+.env.local
+
+# Package files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.rar
+*.tar
+*.zip
+
+# Uploads directory (optional - comment out if you want to include sample uploads)
+# uploads/

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<footer class="main-footer" th:fragment="footer">
+    <strong>Copyright &copy; <span th:text="${#dates.year(#dates.createNow())}">2024</span>.</strong>
+    All rights reserved.
+    <div class="float-right d-none d-sm-inline-block">
+        <b>CSMS - Cold Storage Management System</b>
+    </div>
+</footer>
+
+<!-- Scripts -->
+<div th:fragment="scripts">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE -->
+    <script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/js/adminlte.min.js"></script>
+    <!-- DataTables -->
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/dataTables.bootstrap4.min.js"></script>
+    <script>
+        $(function() {
+            $('.data-table').DataTable({
+                "responsive": true,
+                "autoWidth": false
+            });
+        });
+    </script>
+</div>
+</body>
+</html>

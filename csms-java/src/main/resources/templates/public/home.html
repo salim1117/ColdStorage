@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="public/fragments/public-header :: head('Home')">
+    <style>
+        #main-header:before {
+            background-image: var(--cover-bg);
+        }
+    </style>
+</head>
+<body class="layout-top-nav layout-fixed layout-navbar-fixed" style="height:auto;">
+<div class="wrapper">
+
+    <div th:replace="public/fragments/public-nav :: topbar"></div>
+    <div th:replace="public/fragments/public-nav :: navbar('home')"></div>
+
+    <div class="content-wrapper pt-5">
+        <!-- Hero Header -->
+        <div id="main-header" class="shadow mb-4"
+             th:style="'--cover-bg: url(' + @{/uploads/__${systemInfo?.get('cover')}__} + ');'">
+            <div class="d-flex justify-content-center h-100 w-100 align-items-center flex-column px-3"
+                 style="background:rgba(0,0,0,0.4);height:70vh;">
+                <h1 class="w-100 text-center site-title px-5"
+                    th:text="${systemInfo?.get('name')} ?: 'Cold Storage Management System'">
+                    Cold Storage Management System
+                </h1>
+                <a href="/booking" class="btn btn-lg btn-light rounded-pill px-5 mt-3">
+                    <b>Book Now</b>
+                </a>
+            </div>
+        </div>
+
+        <!-- Main content -->
+        <section class="content">
+            <div class="container">
+
+                <!-- Welcome Content -->
+                <div class="row justify-content-center mb-4">
+                    <div class="col-12">
+                        <div class="card card-outline card-primary shadow rounded-0">
+                            <div class="card-body rounded-0">
+                                <div class="container-fluid">
+                                    <h3 class="text-center">Welcome</h3>
+                                    <hr>
+                                    <div class="welcome-content" th:utext="${systemInfo.get('welcome')}">
+                                        Welcome content.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row justify-content-center mb-4">
+                    <div class="col-12">
+                        <h3 class="text-center mb-4">Available Storages</h3>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3"
+                         th:each="storage : ${storages}">
+                        <div class="card shadow h-100">
+                            <img class="card-img-top"
+                                 th:src="@{/uploads/__${storage.thumbnailPath}__}"
+                                 onerror="this.src='https://via.placeholder.com/300x200?text=Storage'"
+                                 alt="Storage Image" style="height:180px;object-fit:cover;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${storage.name}">Storage Name</h5>
+                                <p class="card-text text-muted" th:text="${storage.description}">Description</p>
+                                <p class="font-weight-bold text-primary"
+                                   th:text="'₱ ' + ${#numbers.formatDecimal(storage.cost, 1, 2)} + ' / month'">
+                                    Price
+                                </p>
+                            </div>
+                            <div class="card-footer bg-white">
+                                <a th:href="@{/storages/{id}(id=${storage.id})}"
+                                   class="btn btn-info btn-sm btn-block">
+                                    View Details
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 text-center" th:if="${#lists.isEmpty(storages)}">
+                        <p class="text-muted">No storages available at this time.</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <div th:replace="public/fragments/public-nav :: footer"></div>
+</div>
+</body>
+</html>

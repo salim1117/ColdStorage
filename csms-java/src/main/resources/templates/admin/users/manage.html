@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{admin/fragments/admin-header :: head('Manage User')}"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav th:replace="~{admin/fragments/admin-nav :: navbar}"></nav>
+
+    <!-- Sidebar -->
+    <div th:replace="~{admin/fragments/admin-nav :: sidebar}"></div>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper pt-3">
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card card-outline card-primary rounded-0 shadow">
+                    <div class="card-header">
+                        <h3 class="card-title" th:text="${user.id == null ? 'Create New User' : 'Update User Details'}">Manage User</h3>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/admin/users/manage}" method="post" enctype="multipart/form-data" id="manage-user-form">
+                            <input type="hidden" name="id" th:value="${user.id}">
+                            
+                            <div class="form-group col-md-6">
+                                <label for="firstname">First Name</label>
+                                <input type="text" name="firstname" id="firstname" class="form-control" th:value="${user.firstname}" required>
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="lastname">Last Name</label>
+                                <input type="text" name="lastname" id="lastname" class="form-control" th:value="${user.lastname}" required>
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="username">Username</label>
+                                <input type="text" name="username" id="username" class="form-control" th:value="${user.username}" required autocomplete="off">
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="password">Password</label>
+                                <input type="password" name="password" id="password" class="form-control" autocomplete="off" th:required="${user.id == null}">
+                                <small th:if="${user.id != null}" class="text-info"><i>Leave this blank if you don't want to change the password.</i></small>
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="type">User Type</label>
+                                <select name="type" id="type" class="custom-select" required>
+                                    <option value="1" th:selected="${user.type == 1}">Administrator</option>
+                                    <option value="2" th:selected="${user.type == 2}">Staff</option>
+                                </select>
+                            </div>
+                            
+                            <div class="form-group col-md-6">
+                                <label for="avatarFile" class="control-label">Avatar</label>
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="avatarFile" name="avatar" accept="image/png,image/jpeg" onchange="displayImg(this)">
+                                    <label class="custom-file-label" for="avatarFile">Choose file</label>
+                                </div>
+                            </div>
+                            
+                            <div class="form-group col-md-6 d-flex justify-content-center">
+                                <img th:src="${user.avatar != null ? '/uploads/' + user.avatar : '/dist/img/no-image-available.png'}" alt="User Avatar" id="cimg" class="img-fluid img-thumbnail img-circle" style="height: 15vh; width: 15vh; object-fit: cover; border-radius: 100%;">
+                            </div>
+                            
+                            <div class="card-footer col-md-12 bg-transparent border-top-0 px-0">
+                                <button type="submit" class="btn btn-primary btn-sm btn-flat mr-2">Save User</button>
+                                <a href="/admin/users" class="btn btn-secondary btn-sm btn-flat">Cancel</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{admin/fragments/admin-footer :: footer}"></footer>
+</div>
+
+<div th:replace="~{admin/fragments/admin-footer :: scripts}"></div>
+<script>
+    function displayImg(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('#cimg').attr('src', e.target.result);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+</body>
+</html>

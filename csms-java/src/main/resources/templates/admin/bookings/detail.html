@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="~{admin/fragments/admin-header :: head('Booking Detail')}"></head>
+<body class="hold-transition sidebar-mini layout-fixed">
+<div class="wrapper">
+
+    <!-- Navbar -->
+    <nav th:replace="~{admin/fragments/admin-nav :: navbar}"></nav>
+
+    <!-- Sidebar -->
+    <div th:replace="~{admin/fragments/admin-nav :: sidebar}"></div>
+
+    <!-- Content Wrapper -->
+    <div class="content-wrapper pt-3">
+        <section class="content">
+            <div class="container-fluid">
+                <div class="card card-outline card-dark rounded-0">
+                    <div class="card-header rounded-0">
+                        <h5 class="card-title text-primary" th:text="'Booking Details of ' + ${booking.bookCode}">Booking Details</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="container-fluid">
+                            <div id="outprint">
+                                <style>
+                                    #thumb-img-storage {
+                                        width: 50vw;
+                                        height: 40vh;
+                                        object-fit: scale-down;
+                                        object-position: center center;
+                                    }
+                                </style>
+                                <div class="text-info">Booking Code</div>
+                                <h4 class=""><b th:text="${booking.bookCode}">BK-01</b></h4>
+                                <hr>
+                                
+                                <fieldset>
+                                    <legend class="text-info">Client's Information</legend>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <dl>
+                                                <dt class="text-muted">Full Name</dt>
+                                                <dd class='pl-4 fs-4 fw-bold' th:text="${booking.clientName}">Client Name</dd>
+                                                <dt class="text-muted">Gender</dt>
+                                                <dd class='pl-4 fs-4 fw-bold' th:text="${meta?.get('gender')} ?: ''">Gender</dd>
+                                                <dt class="text-muted">Birthday</dt>
+                                                <dd class='pl-4 fs-4 fw-bold' th:text="${meta?.get('dob')} ?: ''">DOB</dd>
+                                            </dl>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <dl>
+                                                <dt class="text-muted">Contact #</dt>
+                                                <dd class='pl-4 fs-4 fw-bold' th:text="${meta?.get('contact')} ?: ''">Contact</dd>
+                                                <dt class="text-muted">Email</dt>
+                                                <dd class='pl-4 fs-4 fw-bold' th:text="${meta?.get('email')} ?: ''">Email</dd>
+                                                <dt class="text-muted">Address</dt>
+                                                <dd class='pl-4 fs-4 fw-bold' th:text="${meta?.get('address')} ?: ''">Address</dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <hr>
+                                
+                                <fieldset>
+                                    <legend class="text-info">Booking Information</legend>
+                                    <table class="table table-bordered">
+                                        <colgroup>
+                                            <col width="30%">
+                                            <col width="70%">
+                                        </colgroup>
+                                        <tbody>
+                                            <tr>
+                                                <th colspan="2" class="text-center"><b>Cold Storage</b></th>
+                                            </tr>
+                                            <tr th:if="${storage != null}">
+                                                <th colspan='2' class="text-center">
+                                                    <img th:src="@{'/uploads/' + ${storage.thumbnailPath}}" onerror="this.src='/dist/img/no-image-available.png'" alt="Thumbnail" class="img-fluid bg-gradient-black" id="thumb-img-storage">
+                                                </th>
+                                            </tr>
+                                            <tr>
+                                                <th>Name</th>
+                                                <td th:text="${storage != null ? storage.name : ''}">Storage Name</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Description</th>
+                                                <td th:utext="${storage != null ? storage.description : ''}">Description</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Cost</th>
+                                                <td class="text-right" th:text="${storage != null ? #numbers.formatDecimal(storage.cost, 1, 2) : '0.00'}">0.00</td>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2" class="text-center"><b>Schedule</b></th>
+                                            </tr>
+                                            <tr>
+                                                <th>Date From</th>
+                                                <td class="text-right" th:text="${booking.dateFrom}">2024-12-17</td>
+                                            </tr>
+                                            <tr>
+                                                <th>Date To</th>
+                                                <td class="text-right" th:text="${booking.dateTo}">2024-12-31</td>
+                                            </tr> 
+                                            <tr>
+                                                <th>Days</th>
+                                                <td class="text-right" th:text="${meta?.get('storing_days')} ?: ''">14</td>
+                                            </tr> 
+                                            <tr>
+                                                <th colspan="2" class="text-center"><b>Payable Amount</b></th>
+                                            </tr>
+                                            <tr>
+                                                <th colspan="2" class="text-center"><b th:text="${#numbers.formatDecimal(booking.amount, 1, 2)}">0.00</b></th>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </fieldset>
+                                <hr>
+                                
+                                <div class="text-muted">Status</div>
+                                <div class="pl-4 mb-3">
+                                    <span th:class="'badge badge-' + ${booking.statusBadgeClass} + ' badge-pill'" th:text="${booking.statusLabel}">Pending</span>
+                                </div>
+                                
+                                <div th:if="${meta?.get('remarks') != null}" class="mb-3">
+                                    <div class="text-muted">Remarks</div>
+                                    <p class="pl-4" th:text="${meta.get('remarks')}">Remarks</p>
+                                </div>
+                            </div>
+                            
+                            <hr>
+                            <div class="rounded-0 text-center">
+                                <button class="btn btn-sm btn-success btn-flat" type="button" id="print-btn"><i class="fa fa-print"></i> Print</button>
+                                <button class="btn btn-sm btn-primary btn-flat" type="button" data-toggle="collapse" data-target="#statusCollapse"><i class="fa fa-edit"></i> Update Status</button>
+                                <a class="btn btn-light border btn-flat btn-sm" href="/admin/bookings"><i class="fa fa-angle-left"></i> Back to List</a>
+                            </div>
+                            
+                            <div class="collapse mt-3" id="statusCollapse">
+                                <div class="card card-body">
+                                    <form th:action="@{/admin/bookings/status}" method="post">
+                                        <input type="hidden" name="id" th:value="${booking.id}">
+                                        <div class="form-group">
+                                            <label for="statusSelect">Select Status</label>
+                                            <select name="status" id="statusSelect" class="form-control">
+                                                <option value="0" th:selected="${booking.status == 0}">Pending</option>
+                                                <option value="1" th:selected="${booking.status == 1}">Approved</option>
+                                                <option value="2" th:selected="${booking.status == 2}">Rejected</option>
+                                                <option value="3" th:selected="${booking.status == 3}">Completed</option>
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary btn-sm btn-flat">Save Status</button>
+                                    </form>
+                                </div>
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer th:replace="~{admin/fragments/admin-footer :: footer}"></footer>
+</div>
+
+<div th:replace="~{admin/fragments/admin-footer :: scripts}"></div>
+<script>
+    $(function(){
+        $('#print-btn').click(function(){
+            var nw = window.open("","_blank","height=800,width=1200,left=200")
+            var printContents = $('#outprint').html();
+            nw.document.write('<html><head><title>Booking Print View</title>');
+            nw.document.write('<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/admin-lte@3.2.0/dist/css/adminlte.min.css">');
+            nw.document.write('<style>#thumb-img-storage { max-width:100%; height:auto; }</style>');
+            nw.document.write('</head><body class="p-4">');
+            nw.document.write('<h1 class="text-center">Booking Details</h1>');
+            nw.document.write(printContents);
+            nw.document.write('</body></html>');
+            nw.document.close();
+            setTimeout(function(){
+                nw.print();
+                setTimeout(function(){ nw.close(); }, 500);
+            }, 500);
+        });
+    });
+</script>
+</body>
+</html>
